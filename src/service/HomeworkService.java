@@ -84,18 +84,28 @@ public class HomeworkService {
                     System.out.println(findHomeworkList(homeworkMap,idClassroom));
                     break;
                 case 3:
+                    System.out.println("Danh sách bài tập về nhà:");
+                    System.out.println(findHomeworkList(homeworkMap,idClassroom));
                     updateHomeworkContent(scanner,homeworkMap,checkInputHomeworkId(scanner,homeworkMap,idClassroom));
                     break;
                 case 4:
+                    System.out.println("Danh sách bài tập về nhà:");
+                    System.out.println(findHomeworkList(homeworkMap,idClassroom));
                     submitHomeworkService.showHomeworkSubmit(users, submitHomeworkMap, checkInputHomeworkId(scanner,homeworkMap,idClassroom));
                     break;
                 case 5:
-                    pointService.insertPoint(scanner,pointMap,classroomMap,idClassroom,checkInputHomeworkId(scanner,homeworkMap,idClassroom));
+                    System.out.println("Danh sách bài tập về nhà:");
+                    System.out.println(findHomeworkList(homeworkMap,idClassroom));
+                    pointService.insertPoint(scanner,pointMap,classroomMap,idClassroom,checkInputHomeworkId(scanner,homeworkMap,idClassroom),users);
                     break;
                 case 6:
-                    pointService.updatePoint(scanner,idClassroom,checkInputHomeworkId(scanner,homeworkMap,idClassroom),pointMap);
+                    System.out.println("Danh sách bài tập về nhà:");
+                    System.out.println(findHomeworkList(homeworkMap,idClassroom));
+                    pointService.updatePoint(scanner,idClassroom,checkInputHomeworkId(scanner,homeworkMap,idClassroom),pointMap,homeworkMap,users,classroomMap);
                     break;
                 case 7:
+                    System.out.println("Danh sách bài tập về nhà:");
+                    System.out.println(findHomeworkList(homeworkMap,idClassroom));
                     pointService.showPointForTeacher(pointMap,users,classroomMap,idClassroom,checkInputHomeworkId(scanner,homeworkMap,idClassroom));
                     break;
                 case 8:
@@ -120,9 +130,13 @@ public class HomeworkService {
                     System.out.println(findHomeworkList(homeworkMap,idClassroom));
                     break;
                 case 2:
+                    System.out.println("Danh sách bài tập về nhà:");
+                    System.out.println(findHomeworkList(homeworkMap,idClassroom));
                     submitHomeworkService.insertSubmitHomework(scanner,submitHomeworkMap,checkInputHomeworkId(scanner,homeworkMap,idClassroom),idStudent);
                     break;
                 case 3:
+                    System.out.println("Danh sách bài tập về nhà:");
+                    System.out.println(findHomeworkList(homeworkMap,idClassroom));
                     pointService.showPointForStudent(pointMap,idClassroom,idStudent,checkInputHomeworkId(scanner,homeworkMap,idClassroom));
                     break;
                 case 4:

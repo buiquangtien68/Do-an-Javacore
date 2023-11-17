@@ -80,6 +80,7 @@ public class ClassroomService {
             int select=utils.inputInteger(scanner);
             switch (select){
                 case 1:
+                    System.out.println("Danh sách bài giảng:");
                     lessonService.findLLessonList(lessonMap,idClassroom);
                     break;
                 case 2:

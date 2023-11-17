@@ -22,6 +22,7 @@ public class LessonService {
             int select=utils.inputInteger(scanner);
             switch (select){
                 case 1:
+                    System.out.println("Danh sách bài giảng:");
                     findLLessonList(lessonMap,idClassroom);
                     lessonMenu(scanner,lessonMap,idClassroom);
                     break;
@@ -54,6 +55,7 @@ public class LessonService {
                     insertLesson(scanner,lessonMap,idClassroom);
                     break;
                 case 2:
+                    System.out.println("Danh sách bài giảng:");
                     findLLessonList(lessonMap,idClassroom);
                     break;
                 case 3:
@@ -83,7 +85,6 @@ public class LessonService {
     //TÌM DANH SÁCH BÀI GIẢNG
     public void findLLessonList(Map<Integer,Lesson> lessonMap, int idClassroom){
         int countClass=0;
-        System.out.println("Danh sách bài giảng:");
         for (Map.Entry<Integer,Lesson> entry : lessonMap.entrySet()){
             if (idClassroom==entry.getValue().getIdClassroom()){
                 System.out.println(entry);

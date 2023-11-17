@@ -8,12 +8,14 @@ import java.util.*;
 public class PointService {
     UserService userService=new UserService();
     Utils utils=new Utils();
-    public void insertPoint(Scanner scanner, Map<Integer, Point> pointMap, Map<Integer, Classroom> classroomMap, int idClassroom, int idHomework){
+    public void insertPoint(Scanner scanner, Map<Integer, Point> pointMap, Map<Integer, Classroom> classroomMap, int idClassroom, int idHomework,ArrayList<User> users){
         Point point=new Point();
         point.setIdHomework(idHomework);
         point.setIdClassroom(idClassroom);
         boolean isError=false;
         do {
+            System.out.println("Danh sách học sinh lớp:");
+            System.out.println(userService.findStudentList(users,classroomMap,idClassroom));
             System.out.println("Mời bạn nhập id học sinh:");
             int idStudent = utils.inputInteger(scanner);
             if (classroomMap.get(idClassroom).getStudents().contains(idStudent)) {
@@ -29,13 +31,16 @@ public class PointService {
             }
         }while (!isError);
     }
-    public void updatePoint(Scanner scanner, int idClassroom, int idHomework, Map<Integer, Point> pointMap){
+    public void updatePoint(Scanner scanner, int idClassroom, int idHomework, Map<Integer, Point> pointMap, Map<Integer,Homework> homeworkMap, ArrayList<User> users,Map<Integer,Classroom> classroomMap ){
+        HomeworkService homeworkService=new HomeworkService();
         boolean isExist=false;
+        System.out.println("Danh sách học sinh lớp:");
+        System.out.println(userService.findStudentList(users,classroomMap,idClassroom));
+        System.out.println("Mời bạn nhập id học sinh");
+        int idStudent=utils.inputInteger(scanner);
         for (Map.Entry<Integer,Point> entry: pointMap.entrySet()){
             if (entry.getValue().getIdClassroom()==idClassroom && entry.getValue().getIdHomework()==idHomework ){
                 //System.out.println(userService.findStudentList());
-                System.out.println("Mời bạn nhập id học sinh");
-                int idStudent=utils.inputInteger(scanner);
                 if (entry.getValue().getIdStudent()==idStudent){
                     System.out.println("Mời bạn sửa điểm:");
                     entry.getValue().setScore(utils.inputDouble(scanner));
@@ -47,7 +52,9 @@ public class PointService {
         }
         if (!isExist){
             System.out.println("Không tồn tại học sinh này, vui lòng nhập lại");
-            updatePoint(scanner,idClassroom,idHomework,pointMap);
+            System.out.println("Danh sách bài tập về nhà:");
+            System.out.println(homeworkService.findHomeworkList(homeworkMap,idClassroom));
+            updatePoint(scanner,idClassroom,idHomework,pointMap,homeworkMap,users,classroomMap);
         }
     }
     public void showPointForStudent(Map<Integer, Point> pointMap, int idClassroom,int idStudent, int idHomework){
