@@ -22,7 +22,7 @@ public class SubmitHomeworkService {
     }
     public void insertSubmitHomework(Scanner scanner, Map<Integer, SubmitHomework> submitHomeworkMap, int idHomework, int idStudent){
         for (Map.Entry<Integer,SubmitHomework> entry:submitHomeworkMap.entrySet()){
-            if (entry.getValue().getIdHomework()==idHomework && entry.getValue().getIdHomework()==idStudent) {
+            if (entry.getValue().getIdHomework()==idHomework && entry.getValue().getIdStudent()==idStudent) {
                 System.out.println("Mời bạn nộp bài:");
                 entry.getValue().setContent(scanner.nextLine());
                 System.out.println("Đã nộp thành công");

@@ -95,21 +95,15 @@ public class PointService {
         }
         return pointAverageMap;
     }
+
     public void rankings(Map<Integer, Point> pointMap,Map<Integer, Homework> homeworkMap,  int idClassroom,ArrayList<User> users,Map<Integer,Classroom> classroomMap){
         List<Map.Entry<User,Double>> entryList=new ArrayList<>(calculatePointAverage(pointMap,homeworkMap,idClassroom,users,classroomMap).entrySet());
-        Collections.sort(entryList, new Comparator<Map.Entry<User,Double>>() {
-            @Override
-            public int compare(Map.Entry<User,Double> o1, Map.Entry<User,Double> o2) {
-                return  (o2.getValue().compareTo(o1.getValue()));
-            }
-        });
-        Map<User,Double> sortedMap=new HashMap<>();
-        for (Map.Entry<User,Double> entry:entryList){
-            sortedMap.put(entry.getKey(), entry.getValue());
-        }
+        entryList.sort((o1, o2) -> (o2.getValue().compareTo(o1.getValue())));
 
-        for (Map.Entry<User,Double> entry:sortedMap.entrySet()){
+        for (Map.Entry<User,Double> entry: entryList){
             System.out.println("id học sinh: "+entry.getKey().getId()+", Họ tên: "+entry.getKey().getName()+", Điểm trung bình: "+entry.getValue());
         }
     }
+
+
 }

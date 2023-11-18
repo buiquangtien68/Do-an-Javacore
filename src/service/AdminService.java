@@ -90,7 +90,7 @@ public class AdminService {
             System.out.println("Mời bạn nhập id học sinh thứ "+(i+1)+":");
             while (true){
                 int idStudent = utils.inputInteger(scanner);
-                if(isStudentAttendClass(idStudent, startDate, classroomMap)){
+                if(isStudentAttendClass(idStudent, startDate, finishDate, classroomMap)){
                     System.out.println("Học sinh chưa hoàn thành lớp trước đó, mời bạn nhập lại");
                 }else {
                     students.add(idStudent);
@@ -101,10 +101,13 @@ public class AdminService {
         classroom.setStudents(students);
         classroomMap.put(classroom.getIdClassroom(),classroom);
     }
-    private boolean isStudentAttendClass(int newIdStudent, LocalDate newClassStartDate, Map<Integer, Classroom> classroomMap){
+    private boolean isStudentAttendClass(int newIdStudent, LocalDate newClassStartDate,LocalDate newClassFinishDate, Map<Integer, Classroom> classroomMap){
         for (Map.Entry<Integer,Classroom> classroomEntry : classroomMap.entrySet()){
             Classroom currentClass = classroomEntry.getValue();
-            if(currentClass.getFinishDate().isAfter(newClassStartDate)){
+            if(isDateInRange(newClassStartDate, currentClass.getStartDate(), currentClass.getFinishDate())
+                    || isDateInRange(newClassFinishDate, currentClass.getStartDate(), currentClass.getFinishDate())
+                    || isDateInRange(currentClass.getStartDate(), newClassStartDate, newClassFinishDate)
+                    || isDateInRange(currentClass.getFinishDate(), newClassStartDate, newClassFinishDate)){
                 for (Integer idStudent : currentClass.getStudents()){
                     if(idStudent == newIdStudent){
                         return true;
@@ -114,8 +117,12 @@ public class AdminService {
         }
         return false;
     }
-    private boolean checkTeacherSchedule(int idTeacher, int timeFrame, int timeSchedule,Map<Integer,Schedule> scheduleMap, Map<Integer, Classroom > classroomMap){
-        boolean isFree=true;
+    protected boolean isDateInRange(LocalDate dateToCheck, LocalDate startDate, LocalDate endDate) {
+        return !(dateToCheck.isBefore(startDate) || dateToCheck.isAfter(endDate));
+    }
+
+    private int checkTeacherSchedule(int idTeacher, int timeFrame, int timeSchedule,Map<Integer,Schedule> scheduleMap, Map<Integer, Classroom > classroomMap){
+        int countClassSameSchedule=0;
         List<Integer> myClassList=new ArrayList<>();
         for (Map.Entry<Integer,Classroom> classroomEntry:classroomMap.entrySet()){
             if (idTeacher==classroomEntry.getValue().getTeacherId()){
@@ -127,12 +134,12 @@ public class AdminService {
                 if (scheduleEntry.getValue().getIdClassroom()==idClassroom){
                     if (timeSchedule==scheduleEntry.getValue().getTimeSchedule() && timeFrame==scheduleEntry.getValue().getTimeFrame()){
                         System.out.println("Giáo viên đã bị trùng lịch trình");
-                        isFree=false;
+                        countClassSameSchedule++;
                     }
                 }
             }
         }
-        return isFree;
+        return countClassSameSchedule;
     }
     private void checkInputTeacher(Scanner scanner, int timeFrame, int timeSchedule, Map<Integer, Classroom > classroomMap, ArrayList<User> users, Map<Integer,Schedule> scheduleMap,Classroom classroom){
         boolean isError=false;
@@ -140,10 +147,10 @@ public class AdminService {
             System.out.println(userService.getAllUserByRole(1,users));
             System.out.println("Mời bạn nhập id của giáo viên dạy lớp này:");
             int idTeacher=utils.inputInteger(scanner);
-            if (checkTeacherSchedule(idTeacher,timeFrame,timeSchedule,scheduleMap,classroomMap)){
+            if (checkTeacherSchedule(idTeacher,timeFrame,timeSchedule,scheduleMap,classroomMap)==0){
                 classroom.setTeacherId(idTeacher);
+                isError=false;
             }else {
-                System.out.println("Giáo viên đã bị trùng lịch trình");
                 isError=true;
             }
         }while (isError);
@@ -238,8 +245,15 @@ public class AdminService {
         int nStudent=utils.inputInteger(scanner);
         for (int i = 0; i < nStudent ; i++) {
             System.out.println("Mời bạn nhập id học sinh thứ "+(i+1)+":");
-            int idStudent=utils.inputInteger(scanner);
-            students.add(idStudent);
+            while (true){
+                int idStudent = utils.inputInteger(scanner);
+                if(isStudentAttendClass(idStudent, classroomMap.get(idClassroom).getStartDate(), classroomMap.get(idClassroom).getFinishDate(), classroomMap)){
+                    System.out.println("Học sinh chưa hoàn thành lớp trước đó, mời bạn nhập lại");
+                }else {
+                    students.add(idStudent);
+                    break;
+                }
+            }
         }
         classroomMap.get(idClassroom).setStudents(students);
     }
